@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<!-- v:1790620100 -->
+<title>ドロケイ（鍵・最終結果）</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=RocknRoll+One&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;height:100%;height:100dvh;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:radial-gradient(ellipse at center,#286848,#142c22);color:#f4ead0;overflow:hidden}
+section{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+section.on{display:flex}
+#mode{padding:0;display:none}
+#mode.on{display:flex}
+#mode h1{position:absolute;top:24%;left:50%;transform:translate(-50%,-50%);margin:0;width:100%;text-align:center;font-size:50px;letter-spacing:.12em;color:#e8c36a;font-family:"RocknRoll One","Hiragino Kaku Gothic ProN",sans-serif;font-weight:400}
+#mode .hero{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);display:grid;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px);gap:6px}
+#mode .hero i{background:#0c3a24;border:2px solid #e8c36a66;border-radius:8px}
+#mode .hero i.red{border-color:#ff5a5a}
+#mode .hero i.blue{border-color:#7a8cff}
+#mode .ui{position:absolute;top:72%;left:50%;transform:translate(-50%,-50%);width:100%;display:flex;flex-direction:column;align-items:center}
+button{border:2px solid #e8c36a;background:linear-gradient(#4a3210,#2c1c08);color:#e8c36a;border-radius:12px;min-height:46px;min-width:88px;font-weight:800;font-size:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+input{width:min(92vw,280px);padding:12px;border-radius:12px;border:1px solid #e8c36a66;background:#0b160f;color:#fff;text-align:center;font-size:18px}
+.hint{opacity:.7;font-size:12px;text-align:center}
+.rules-body{width:min(92vw,360px);max-height:min(70vh,520px);overflow:auto;font-size:13px;line-height:1.55;text-align:left;-webkit-overflow-scrolling:touch}
+.ruleRow{display:flex;gap:12px;align-items:flex-start;margin:10px 0;padding:8px;background:#0a181066;border-radius:12px;border:1px solid #e8c36a33}.ruleStack{flex:none;display:flex;flex-direction:column;align-items:center}.ruleArrows{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;margin:4px 0;color:#e8c36a;font-size:14px;font-weight:900;gap:0}.ruleArrows span{display:block;height:12px}
+.ruleCell{flex:none;width:64px;height:64px;border:2px solid #e8c36a;border-radius:12px;background:#0c3a24;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:13px;line-height:1.15;color:#ffe9a8;position:relative}
+.ruleCell.key{color:#ffd36a;font-size:26px}
+.ruleCell.exit{color:#7dffb0}
+.ruleCell.reset{color:#8fd4ff;font-size:28px;padding:6px}
+.ruleCell.fade{color:#ff9a3c}
+.ruleCell.locked{color:#9aa3b2;font-size:24px;opacity:.9}.ruleCell.gone{opacity:.28;filter:grayscale(.4)}.ruleLockBtn{flex:none;min-height:40px;height:40px;min-width:56px;padding:0 10px;font-size:22px;line-height:1;border:2px solid #e8c36a;background:linear-gradient(#4a3210,#2c1c08);color:#e8c36a;border-radius:12px;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.ruleCell.locked::before{content:"";position:absolute;inset:5px;border:2px dashed #9aa3b288;border-radius:10px;pointer-events:none}
+.ruleTxt{flex:1;min-width:0}
+.ruleTxt b{color:#e8c36a}
+.rules-body>p{margin:6px 0}.ruleSteps{margin:8px 0 12px}.ruleStep{display:flex;align-items:flex-start;gap:6px;margin:8px 0}.ruleNum{flex:none;line-height:1.55;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;font-weight:900;font-size:15px;color:#e8c36a;min-width:1.2em}.ruleStepBody{flex:1;min-width:0;line-height:1.55}.rThief{color:#ff5a5a;font-weight:800}.rCop{color:#7a8cff;font-weight:800}
+.ruleCell .dot{position:absolute;left:6px;top:5px;width:8px;height:8px;border-radius:50%;background:#ffe08a;box-shadow:0 0 0 1px #0006}
+.ruleComp{display:flex;gap:6px;align-items:center;margin:6px 0}
+.ruleComp .compHole{width:14px;height:14px}.ruleMini{display:inline-flex;vertical-align:middle;width:28px;height:28px;border:1.5px solid #e8c36a;border-radius:6px;background:#0c3a24;align-items:center;justify-content:center;font-size:14px;margin:0 2px;position:relative;color:#9aa3b2}.ruleTxt b{display:block;margin-bottom:2px;color:#e8c36a}
+#game{justify-content:flex-start;padding:8px 10px 12px}
+.topbar{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:13px;position:relative}.topLeft{display:flex;align-items:center}.roundN{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-height:40px;min-width:88px;padding:0 12px;border:2px solid #e8c36a;border-radius:12px;background:#0a241ccc;color:#e8c36a;font-weight:800;font-size:13px;white-space:nowrap}
+.board{flex:1;width:100%;min-height:0;overflow:hidden;border-radius:14px;margin:8px 0;background:radial-gradient(ellipse at center,#146047,#0a3328);border:3px solid #0a241c;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:8px 12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(80px,1fr));grid-template-rows:repeat(3,minmax(80px,1fr));gap:12px;width:min(88vw,320px);aspect-ratio:1;padding:6px;flex:none}
+.cell{position:relative;border:2px solid #e8c36a;outline:5px solid transparent;outline-offset:0;border-radius:12px;background:#0c3a24;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:15px;padding:6px;line-height:1.2;color:#ffe9a8;width:100%;height:100%}
+.cell.exit{color:#7dffb0}
+.cell.reset{color:#8fd4ff;font-size:28px}.cell>span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;line-height:1}.cell.reset img,.ruleCell.reset img{width:48%;height:48%;object-fit:contain;pointer-events:none;display:block}.cell.exit img{width:48%;height:48%;object-fit:contain;pointer-events:none;display:block}.ruleCell.exit img{width:58%;height:58%;object-fit:contain;pointer-events:none;display:block}.ruleCell.exit,.ruleCell.reset{display:flex;align-items:center;justify-content:center;padding:6px}
+.cell.gone{opacity:.28;filter:grayscale(.4)}
+.cell.gone.thiefPick,.cell.gone.copPick,.cell.gone.hit{opacity:1;filter:none}
+.cell.pick,.cell.thiefPick{outline-color:#ff5a5a}
+.cell.copPick{outline-color:#7a8cff}
+.cell.hit{outline-color:transparent}
+.cell.split{box-shadow:none;border:2px solid #e8c36a;background-image:linear-gradient(#0c3a24,#0c3a24),linear-gradient(90deg,var(--L) 0 50%,var(--R) 50% 100%);background-origin:padding-box;background-clip:padding-box}
+.cell.split::after{content:"";position:absolute;inset:-5px;border-radius:16px;pointer-events:none;background:linear-gradient(90deg,var(--L) 0 50%,var(--R) 50% 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;padding:5px}
+.info{height:22px;min-height:22px;max-height:22px;overflow:hidden;text-align:center;font-weight:800;white-space:nowrap}
+.role{position:absolute;left:10px;bottom:10px;font-weight:900;font-size:16px;padding:5px 12px;border:3px solid currentColor;border-radius:12px;z-index:4;background:#0a241ccc}
+
+.role.thief{color:#ff5a5a}.role.cop{color:#7a8cff}
+.diffWrap{display:flex;flex-direction:column;align-items:center;margin-top:6px}.diffLabel{font-size:11px;font-weight:800;color:#e8c36a;letter-spacing:.06em;margin-bottom:2px;opacity:.9}.diff{min-width:88px;min-height:48px;padding:8px 16px;border:2px solid #e8c36a;border-radius:12px;background:#0a241ccc;text-align:center;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center}
+.diff.plus{color:#6fdc8c}.diff.minus{color:#ff6b76}.diff.zero{color:#e8c36a}
+.banner{display:none;position:fixed;width:max-content;max-width:90vw;left:50%;top:28%;transform:translate(-50%,0);z-index:70;padding:10px 18px;border:3px solid #e8c36a;border-radius:14px;background:#0a1810ee;font-size:28px;font-weight:900;color:#e8c36a;pointer-events:none;white-space:nowrap}
+.banner.on{display:block;animation:banPop 1.1s ease-out forwards}
+.banner.hold{display:block;position:fixed;left:50%;animation:none;opacity:1;transform:translate(-50%,0);z-index:70;font-size:22px;padding:8px 16px}
+.banner.hold.thiefFx{color:#ff5a5a;border-color:#ff5a5a}
+.banner.on.searchFx{color:#7a8cff;border-color:#7a8cff}
+@keyframes banPop{0%{transform:translate(-50%,0) scale(.55);opacity:0}15%{opacity:1;transform:translate(-50%,0) scale(1.05)}80%{opacity:1}100%{opacity:0}}
+#first .w{font-size:36px;font-weight:900;padding:12px 24px;border:3px solid currentColor;border-radius:16px}
+#first .w.thief{color:#ff5a5a}#first .w.cop{color:#7a8cff}
+#result,#first,#ask{background:#0a100cf2;z-index:90}
+#ask{display:none}#ask.on{display:flex}
+.box{background:#1a140c;border:2px solid #e8c36a;border-radius:16px;padding:16px;text-align:center;width:min(92vw,340px)}
+#rTitle{font-size:40px;font-weight:900}
+.gap{width:100%;flex:1;display:flex;align-items:center;justify-content:center;min-height:28px}
+.pot{font-size:22px;font-weight:900;color:#f4ead044;pointer-events:none}
+
+.ruleHead{margin:28px 0 6px;font-weight:900;font-size:15px;color:#e8c36a;text-align:center}#chatBtn,#lockBtn,#waitBtn{position:absolute;z-index:8;min-height:40px;height:40px;min-width:88px;width:auto;font-size:14px;font-weight:800;padding:0 12px;white-space:nowrap;border:2px solid #e8c36a;background:linear-gradient(#4a3210,#2c1c08);color:#e8c36a;border-radius:12px;display:none;right:10px}
+#chatBtn{bottom:10px}
+#lockBtn,#waitBtn{bottom:54px}#lockBtn{font-size:22px;line-height:1;min-width:56px;padding:0 10px}#waitBtn{min-width:56px;padding:0 10px;display:none;align-items:center;justify-content:center}#waitBtn img{width:28px;height:28px;pointer-events:none}
+#lockBtn:disabled,#waitBtn:disabled{opacity:.4}
+#chatPanel{display:none;position:absolute;z-index:9;width:min(72vw,240px);background:#0a1810ee;border:2px solid #e8c36a;border-radius:12px;padding:8px;right:10px;bottom:54px}
+#chatPanel.on{display:block}
+#chatPanel input{width:100%;padding:8px;border-radius:8px;border:1px solid #e8c36a66;background:#0b160f;color:#fff;font-size:14px}
+#chatPanel .row{margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#chatClose,#chatSend{flex:1;min-height:40px;font-size:14px}
+#bubbles{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:82;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:min(90vw,320px)}
+.bubble{max-width:100%;padding:8px 12px;border-radius:16px;font-weight:800;font-size:14px;line-height:1.3;animation:bub 2.8s ease forwards}
+.bubble.me{background:#1d4e89ee;color:#fff;border:2px solid #7ab0ff}
+.bubble.foe{background:#8b1e28ee;color:#fff;border:2px solid #ff8a96}
+@keyframes bub{0%{opacity:0;transform:scale(.86)}12%{opacity:1;transform:scale(1)}75%{opacity:1}100%{opacity:0}}
+
+.cell.key{color:#ffd36a;font-size:28px}
+.cell.locked{color:#9aa3b2;opacity:.85;font-size:26px}
+.cell.locked::before{content:"";position:absolute;inset:6px;border:2px dashed #9aa3b288;border-radius:10px;pointer-events:none}
+
+.cell .dot{position:absolute;left:6px;top:5px;width:8px;height:8px;border-radius:50%;background:#ffe08a;box-shadow:0 0 0 1px #0006}
+.compRow{display:flex;gap:8px;justify-content:center;align-items:center;margin:4px 0 2px;min-height:22px}
+.compHole{width:16px;height:16px;border-radius:50%;border:2px solid #ffe08a88;background:transparent;box-sizing:border-box}
+.compHole.on{background:#ffe08a;border-color:#ffe08a;box-shadow:0 0 8px #ffe08a66}
+.exitWrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%}.exitWrap img{width:48%!important;height:48%!important;object-fit:contain}.x2badge{position:absolute;top:0;right:0;color:#e8c36a;font-weight:900;font-size:15px;line-height:1;pointer-events:none;z-index:2}.ruleCell .x2badge{font-size:10px;top:1px;right:1px}.ruleCell .exitWrap img{width:58%!important;height:58%!important}
+</style>
+</head>
+<body>
+<section id="mode" class="on">
+<h1>ドロケイ</h1>
+<div class="hero"><i></i><i></i><i></i><i></i><i></i><i class="blue"></i><i class="red"></i><i></i><i></i></div>
+<div class="ui">
+  <div class="row"><button onclick="pickMode(false)">対人戦</button><button onclick="pickMode(true)">コンピュータ戦</button></div>
+  <button style="margin-top:14px;min-height:36px;font-size:13px" onclick="show('rules')">ルール説明</button>
+</div>
+</section>
+<section id="rules">
+<h1 style="color:#e8c36a;font-family:Cinzel,serif">ルール</h1>
+<div class="rules-body">
+<div class="ruleHead" style="margin-top:10px">ー　流れ　ー</div>
+<p style="text-align:center;margin:10px 0 12px"><span class="rThief">ドロボウ</span>役と<span class="rCop">ケイサツ</span>役を交互に1度ずつプレイ</p>
+<div class="ruleSteps">
+  <div class="ruleStep"><span class="ruleNum">1</span><div class="ruleStepBody"><span class="rThief">ドロボウ</span><br>マスを選ぶ</div></div>
+  <div class="ruleStep"><span class="ruleNum">2</span><div class="ruleStepBody"><span class="rCop">ケイサツ</span><br>ドロボウが選んだマスを予想する</div></div>
+  <div class="ruleStep"><span class="ruleNum">3</span><div class="ruleStepBody"><span style="color:#c084fc;font-weight:800">結果</span><br>的中･･･ケイサツの勝ち（ポイント変動なし）<br>外れ･･･ドロボウがマスの効果やポイントを獲得</div></div>
+</div>
+<div class="ruleHead">ー　マスの説明　ー</div>
+<div class="ruleRow" style="align-items:center">
+  <div class="ruleStack" style="flex-direction:row;gap:8px;align-items:center">
+    <div class="ruleCell" style="outline:3px solid #ff5a5a;outline-offset:0">50</div>
+    <span style="color:#e8c36a;font-weight:900;font-size:16px" aria-hidden="true">→</span>
+    <div class="ruleCell gone">50</div>
+  </div>
+  <div class="ruleTxt">1度選んだマスは消える。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleCell">50</div>
+  <div class="ruleTxt"><b>ポイントマス</b>書いてあるポイントを獲得。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleCell fade">0</div>
+  <div class="ruleTxt"><b>特殊ポイントマス</b>マスが1つ消える毎にこのマスで獲得できるポイントが100ずつ増加する。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleCell key">🔑</div>
+  <div class="ruleTxt"><b>鍵マス</b>施錠されている<span class="ruleMini locked">🔒</span>マスを開放する。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleCell reset"><img src="reset.png?v=4" alt="リセット"/></div>
+  <div class="ruleTxt"><b>リセットマス</b>消えたマスを復活させる。<br>※コンプリートマークはリセット。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleCell exit"><img src="exit.png?v=11" alt="出口"/></div>
+  <div class="ruleTxt"><b>出口マス</b><span class="rThief">ドロボウ</span>の勝ち。獲得したポイントを加算。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleStack">
+    <div class="ruleCell exit"><span class="exitWrap"><img src="exit2.png?v=17" alt="出口×2"/><span class="x2badge">×2</span></span></div>
+    <div class="ruleArrows" aria-hidden="true"><span>▲</span><span>▼</span></div>
+    <div class="ruleCell locked">🔒</div>
+  </div>
+  <div class="ruleTxt"><b>出口（×2）マス</b><span class="rThief">ドロボウ</span>の勝ち。獲得したポイントの2倍を加算。<br><br>ゲーム開始時は施錠されている。<br><span class="rThief">ドロボウ</span>が鍵マス獲得後に解放。<br><span class="rCop">ケイサツ</span>が施錠ボタンを押したら再び施錠される。</div>
+</div>
+<div class="ruleRow">
+  <div class="ruleCell"><span class="dot"></span></div>
+  <div class="ruleTxt"><b>コンプリートマーク</b>
+    <div class="ruleComp"><span class="compHole on"></span><span class="compHole on"></span><span class="compHole"></span><span class="compHole"></span><span class="compHole"></span></div>
+    5つ全て獲得すると1000 ポイント。
+  </div>
+</div>
+<div class="ruleHead">ー　ボタンの説明　ー</div>
+<div class="ruleRow" style="align-items:center">
+  <div class="ruleLockBtn" aria-hidden="true" style="min-width:56px;padding:0 8px"><img src="wait.png?v=1" alt="様子見" style="width:28px;height:28px;display:block"/></div>
+  <div class="ruleTxt"><b>様子見ボタン（<span class="rThief">ドロボウ専用</span>）</b>このターンはマスを選ばない。<br>※1度しか使用できない</div>
+</div>
+<div class="ruleRow" style="align-items:center">
+  <div class="ruleLockBtn" aria-hidden="true">🔐</div>
+  <div class="ruleTxt"><b>施錠ボタン（<span class="rCop">ケイサツ専用</span>）</b>マスを選ぶ代わりに押せる。<br>開放中の出口（×2）マスを次のターンに再び施錠する。</div>
+</div>
+</div>
+<button onclick="show('mode')" style="margin-top:12px">戻る</button>
+</section>
+<section id="room">
+<h1 style="color:#e8c36a">部屋</h1>
+<p class="hint">合言葉は3文字以上</p>
+<input id="code" maxlength="12" placeholder="あいことば"/>
+<div class="row" style="margin-top:10px"><button onclick="makeRoom()">部屋を作る</button><button onclick="joinRoom()">入る</button></div>
+<p class="hint" id="roomSt"></p>
+<button onclick="backFromRoom()" style="margin-top:14px">戻る</button>
+</section>
+<section id="first"><div class="w thief" id="firstW">ドロボウ</div></section>
+<section id="game">
+  <div class="topbar"><div class="topLeft"><div class="roundN" id="roundN">1戦目</div></div><button onclick="askQuit()" style="min-height:40px;font-size:13px">やり直し</button></div>
+  <div class="info" id="info">マスを選ぶ</div><div class="compRow" id="compRow" aria-label="コンプリート"></div><div class="info" id="leftN" style="opacity:.85;font-size:13px"></div>
+  <div class="board"><div class="gap" id="gapFar"></div><div class="grid" id="grid"></div><div class="gap" id="gapNear"></div><div class="diffWrap"><div class="diffLabel">total</div><div class="diff zero" id="sc">0</div></div><div id="roleLab" class="role thief">ドロボウ</div></div>
+</section>
+<section id="result"><div class="box">
+  <div id="rTitle">Win</div>
+  <div id="rPts"></div>
+  <div class="row" id="rMid" style="margin-top:12px;display:none">
+    <button id="btnNext" onclick="askNext()">交代</button>
+  </div>
+  <div class="row" id="rGate" style="margin-top:12px;display:none">
+    <button onclick="showFinal()">最終結果</button>
+  </div>
+  <div class="row" id="rFinal" style="margin-top:22px;display:none">
+    <button id="btnAgain" onclick="askAgain()">もう1度</button>
+    <button onclick="goTitle()">やめる</button>
+  </div>
+</div></section>
+<section id="ask"><div class="box"><div style="font-weight:800;margin-bottom:12px">モード選択に戻りますか？</div>
+<div class="row"><button onclick="goTitle()">戻る</button><button onclick="$('ask').classList.remove('on')">キャンセル</button></div></div></section>
+<div id="bannerHome"><div class="banner" id="banner"></div></div>
+<script>
+
+let actx;
+function ensureAudio(){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==="suspended") actx.resume();
+  }catch(e){}
+  return actx;
+}
+function beep(freq,dur,type,vol){
+  try{
+    const ctx=ensureAudio(); if(!ctx) return;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    const now=ctx.currentTime;
+    const d=(dur||120)/1000;
+    const v=vol||0.08;
+    o.type=type||"square"; o.frequency.setValueAtTime(freq, now);
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(v, now+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, now+d);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now); o.stop(now+d+0.04);
+  }catch(e){}
+}
+function sfxPick(){ ensureAudio(); beep(520,110,"square",.09); }
+document.addEventListener("click",function(e){ const b=e.target&&e.target.closest&&e.target.closest("button"); if(b&&!b.disabled) sfxPick(); },true);
+function sfxCatch(){ ensureAudio(); beep(523,90,"sine",.09); setTimeout(()=>beep(659,90,"sine",.09),80); setTimeout(()=>beep(784,160,"sine",.1),160); }
+function sfxFound(){ ensureAudio(); beep(420,140,"sawtooth",.14); setTimeout(()=>beep(280,160,"sawtooth",.14),100); setTimeout(()=>beep(160,280,"triangle",.16),220); }
+function sfxLock(){ ensureAudio(); beep(340,90,"square",.1); setTimeout(()=>beep(220,140,"square",.12),70); setTimeout(()=>beep(160,180,"triangle",.1),160); }
+function sfxComplete(){ ensureAudio(); beep(523,80,"sine",.09); setTimeout(()=>beep(659,80,"sine",.09),70); setTimeout(()=>beep(784,80,"sine",.09),140); setTimeout(()=>beep(1046,220,"sine",.11),220); }
+const $=id=>document.getElementById(id);
+const KINDS=["p50","key","p100","p150","p200","fade","exit","reset","exit2"];
+const COMP_IDX=[0,2,3,4,5]; // 1,3,4,5,6マス（コンプリート＆リセット対象）
+const KEY_IDX=1; // 2マス目（鍵）
+function isCompCell(i){return COMP_IDX.indexOf(i)>=0;}
+function hasKey(){ return !!S.hasKey; }
+function exit2Locked(){ return !S.hasKey; }
+function lab(k,fadeN){
+  if(k==="p50")return"50";if(k==="key")return"🔑";if(k==="p100")return"100";
+  if(k==="p150")return"150";if(k==="p200")return"200";
+  if(k==="fade")return String((fadeN||0)*100);
+  if(k==="exit")return"出口";
+  if(k==="exit2")return exit2Locked()?"🔒":"出口\n(×２)";
+  if(k==="reset")return"";
+  return"";
+}
+const S={mode:"cpu",me:1,host:true,thief:1,map:KINDS.slice(),gone:Array(9).fill(false),pot:0,phase:"thief",pick:-1,guess:-1,totals:[0,0,0],pair:0,match:1,pairPts:[0,0,0],votes:{},conn:null,peer:null,hasKey:false,fadeClaim:null,turns:0,pendingLock:false,lockAct:false,preLock:false,waitUsed:false};
+
+function showBubble(text, mine){
+  let w=$("bubbles");
+  if(!w){ w=document.createElement("div"); w.id="bubbles"; document.body.appendChild(w); }
+  if(!text) return;
+  const b=document.createElement("div");
+  b.className="bubble "+(mine?"me":"foe");
+  b.textContent=text;
+  w.appendChild(b);
+  setTimeout(()=>{ if(b.parentNode)b.parentNode.removeChild(b); }, 2800);
+}
+function ensureChatDom(){
+  const host=document.querySelector(".board")||document.body;
+  if(!$("lockBtn")){
+    const lb=document.createElement("button"); lb.id="lockBtn"; lb.type="button"; lb.textContent="🔐"; host.appendChild(lb);
+  }
+  if(!$("waitBtn")){
+    const wb=document.createElement("button"); wb.id="waitBtn"; wb.type="button"; wb.textContent=""; wb.innerHTML='<img src="wait.png?v=1" alt="様子見" style="width:28px;height:28px;display:block"/>'; host.appendChild(wb);
+  }
+  if(!$("chatBtn")){
+    const b=document.createElement("button"); b.id="chatBtn"; b.type="button"; b.textContent="チャット"; host.appendChild(b);
+  }
+  if(!$("chatPanel")){
+    const pan=document.createElement("div"); pan.id="chatPanel";
+    pan.innerHTML='<input id="chatIn" maxlength="40" placeholder="メッセージ"/><div class="row"><button type="button" id="chatClose">閉じる</button><button type="button" id="chatSend">送信</button></div>';
+    host.appendChild(pan);
+  }
+  if(!$("bubbles")){
+    const w=document.createElement("div"); w.id="bubbles"; document.body.appendChild(w);
+  }
+}
+function syncChatVis(){
+  const title=document.querySelector("#mode.on,#room.on,#rules.on,#first.on,#result.on");
+  const play=document.querySelector("#game.on");
+  const on=!title && !!play;
+  const b=$("chatBtn"), pan=$("chatPanel"), lb=$("lockBtn"), wb=$("waitBtn");
+  if(b) b.style.display=on?"block":"none";
+  if(pan && !on) pan.classList.remove("on");
+  syncLockBtn();
+  syncWaitBtn();
+}
+function syncLockBtn(){
+  const lb=$("lockBtn");
+  if(!lb) return;
+  const play=!!document.querySelector("#game.on");
+  const show=play && !iAmThief();
+  lb.style.display=show?"block":"none";
+  const can=show && !!S.hasKey && !S.pendingLock && !S.preLock && S.phase==="cop";
+  lb.disabled=!can;
+  lb.style.bottom="";
+}
+function syncWaitBtn(){
+  const wb=$("waitBtn");
+  if(!wb) return;
+  const play=!!document.querySelector("#game.on");
+  const show=play && iAmThief();
+  wb.style.display=show?"flex":"none";
+  const can=show && S.phase==="thief" && !S.waitUsed;
+  wb.disabled=!can;
+}
+function doThiefWait(){
+  if(!iAmThief() || S.phase!=="thief" || S.waitUsed) return;
+  S.pick=-1;
+  S.waitAct=true;
+  S.waitUsed=true;
+  learnPlayerHide(-1,true);
+  if(S.mode==="pvp") send({type:"wait"});
+  beginSearchThenCop();
+}
+function bootChat(sendFn){
+  ensureChatDom();
+  syncChatVis();
+  const btn=$("chatBtn"), pan=$("chatPanel"), inp=$("chatIn"), sendB=$("chatSend"), lb=$("lockBtn"), wb=$("waitBtn");
+  if(lb) lb.onclick=function(e){ e.preventDefault(); e.stopPropagation(); doPoliceLock(); };
+  if(wb) wb.onclick=function(e){ e.preventDefault(); e.stopPropagation(); doThiefWait(); };
+  btn.onclick=function(e){ e.preventDefault(); e.stopPropagation(); pan.classList.toggle("on"); if(pan.classList.contains("on")) setTimeout(()=>inp&&inp.focus(),50); };
+  function go(){
+    const t=(inp.value||"").trim(); if(!t) return;
+    inp.value=""; pan.classList.remove("on");
+    showBubble(t,true);
+    try{ sendFn && sendFn(t); }catch(e){}
+  }
+  sendB.onclick=function(e){ e.preventDefault(); go(); };
+  const clo=$("chatClose");
+  if(clo) clo.onclick=function(e){ e.preventDefault(); pan.classList.remove("on"); };
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); go(); } });
+}
+function show(id){try{setTimeout(syncChatVis,0)}catch(e){}["mode","rules","room","game","result","first"].forEach(x=>{$(x).classList.toggle("on",x===id); $(x).style.display=x===id?"flex":"none";})}
+function bannerHome(){const el=$("banner");if(!el)return el;const home=document.getElementById("bannerHome")||document.body;if(el.parentElement!==home)home.appendChild(el);return el}
+function placeHoldBanner(el){
+  if(!el)return;
+  const grid=$("grid");
+  el.style.left="50%";
+  el.style.transform="translate(-50%,0)";
+  if(!grid){el.style.top="12%";return;}
+  const r=grid.getBoundingClientRect();
+  const h=el.offsetHeight||44;
+  let top=r.top-h-10;
+  if(top<6) top=r.bottom+10;
+  el.style.top=Math.round(top)+"px";
+}
+function banner(t,cls){const el=bannerHome();el.textContent=t;el.className="banner";void el.offsetWidth;el.classList.add("on");if(cls)el.classList.add(cls);placeHoldBanner(el);}
+function holdBanner(t,cls){const el=bannerHome();if(!el)return;el.textContent=t;el.className="banner hold"+(cls?" "+cls:"");placeHoldBanner(el);}
+function clearHoldBanner(){const el=$("banner");if(el&&el.classList.contains("hold")){el.className="banner";el.style.top="";el.style.left="";el.style.transform="";}}
+window.addEventListener("resize",()=>{const el=$("banner");if(el&&el.classList.contains("hold"))placeHoldBanner(el);});
+function legalCells(){ return cpuOpenCells(); }
+function maybeCopNoMove(){
+  if(S.phase!=="cop" || iAmThief() || S.resolving) return;
+  const opts=legalCells();
+  const canLock=!!S.hasKey && !S.pendingLock;
+  if(opts.length || canLock) return;
+  S.guess=-1;
+  if(S.mode==="pvp") send({type:"guess",i:-1});
+  resolve();
+}
+function maybeThiefNoMove(){
+  if(S.phase!=="thief" || !iAmThief() || S.resolving) return;
+  if(legalCells().length) return;
+  if(!S.waitUsed) return; // 様子見が残っていればプレイヤー操作待ち
+  if(S.mode==="pvp") send({type:"stuck"});
+  endGame(false);
+}
+async function beginSearchThenCop(){
+  // ドロボウ側: 潜伏中・捜索開始なし / ケイサツ側: 捜索開始なし（潜伏中のみ）
+  clearHoldBanner();
+  S.phase="cop";
+  paint();
+  if(S.preLock){ S.preLock=false; later(()=>doPoliceLock(true),400); }
+  else if(S.mode==="cpu" && iAmThief()) later(cpuGuess,cpuThinkMs());
+  else later(maybeCopNoMove, 350);
+}
+function fadeN(){return S.gone?S.gone.filter(Boolean).length:0}
+function pointLeft(){return COMP_IDX.filter(i=>!S.gone[i]).length}
+function paintSc(){
+  const d=S.totals[S.me]||0;
+  $("sc").textContent=String(d);
+  $("sc").className="diff "+(d>0?"plus":d<0?"minus":"zero");
+    const host=$("gapNear");
+  const other=$("gapFar");
+  if(other) other.innerHTML="";
+  if(host){ host.innerHTML=""; const p=document.createElement("div"); p.className="pot"; p.id="pot"; p.textContent=String(S.pot||0); host.appendChild(p); }
+}
+function iAmThief(){return S.thief===S.me}
+function paintCell(c,k,i){
+  const amT=iAmThief();
+  const locked=(k==="exit2"&&exit2Locked());
+  c.className="cell"+(k.indexOf("exit")===0?" exit":"")+(k==="reset"?" reset":"")+(k==="key"?" key":"")+(locked?" locked":"")+(S.gone[i]?" gone":"");
+  c.style.removeProperty("--L"); c.style.removeProperty("--R");
+  if(S.phase==="reveal"){
+    if((!S.hidePick || amT) && i===S.pick){
+      if(S.pick===S.guess){
+        c.classList.add("hit","split");
+        c.style.setProperty("--L", amT?"#ff5a5a":"#7a8cff");
+        c.style.setProperty("--R", amT?"#7a8cff":"#ff5a5a");
+      } else c.classList.add("thiefPick");
+    }
+    if(i===S.guess && (S.guess!==S.pick || S.hidePick)) c.classList.add("copPick");
+  } else if(amT && S.phase!=="thief" && i===S.pick) c.classList.add("thiefPick");
+  c.textContent="";
+  c.querySelectorAll(".dot").forEach(n=>n.remove());
+  if(isCompCell(i) && !S.gone[i]){
+    const d=document.createElement("span"); d.className="dot"; c.appendChild(d);
+  }
+  const tx=document.createElement("span"); tx.style.cssText="display:flex;align-items:center;justify-content:center;width:100%;height:100%";
+  if(k==="exit2"){
+    if(exit2Locked()) tx.textContent="🔒";
+    else {
+      const wrap=document.createElement("span"); wrap.className="exitWrap";
+      const img=document.createElement("img");
+      img.src="exit2.png?v=17"; img.alt="出口×2";
+      const b=document.createElement("span"); b.className="x2badge"; b.textContent="×2";
+      wrap.appendChild(img); wrap.appendChild(b); tx.appendChild(wrap);
+    }
+  } else if(k==="exit"){
+    const img=document.createElement("img");
+    img.src="exit.png?v=10"; img.alt="出口";
+    tx.appendChild(img);
+  } else if(k==="fade"){
+    if(S.gone[i] && S.fadeClaim!=null) tx.textContent=String(S.fadeClaim);
+    else tx.textContent=String(fadeN()*100);
+  } else if(k==="key"){
+    // 開放中は鍵なし。施錠中は🔑（薄いマスでも見た目だけ戻る）
+    if(S.hasKey) tx.textContent="";
+    else tx.textContent="🔑";
+  } else if(k==="reset"){
+    const img=document.createElement("img");
+    img.src="reset.png?v=4"; img.alt="リセット";
+    tx.appendChild(img);
+  } else tx.textContent=lab(k,fadeN());
+  c.appendChild(tx);
+  if(k==="fade") c.style.color="#ff9a3c";
+  else c.style.removeProperty("color");
+}
+function paint(){
+  const g=$("grid");
+  const amT=iAmThief();
+  if(g.children.length!==9){
+    g.innerHTML="";
+    S.map.forEach((k,i)=>{
+      const c=document.createElement("div");
+      c.onclick=()=>tap(i);
+      paintCell(c,k,i);
+      g.appendChild(c);
+    });
+  } else {
+    S.map.forEach((k,i)=>paintCell(g.children[i],k,i));
+  }
+  const thiefTurn=S.phase==="thief";
+  $("roleLab").textContent=amT?"ドロボウ":"ケイサツ";
+  $("roleLab").className="role "+(amT?"thief":"cop");
+  // 潜伏中エフェクトはケイサツ側のみ（ドロボウが選んでいる間）
+  if(S.phase==="thief" && !iAmThief()) holdBanner("ドロボウ潜伏中","thiefFx");
+  else clearHoldBanner();
+  if(S.phase==="wait") $("info").textContent="相手待ち";
+  else if(thiefTurn) $("info").textContent=amT?"隠れるマスを選ぶ":"ドロボウが選んでいます";
+  else if(S.phase==="cop") $("info").textContent=amT?"ケイサツが探しています":"ドロボウのマスを当てる";
+  else $("info").textContent="";
+  const row=$("compRow");
+  if(row){
+    row.innerHTML="";
+    const filled=COMP_IDX.filter(i=>S.gone[i]).length;
+    COMP_IDX.forEach((_,n)=>{
+      const h=document.createElement("div");
+      h.className="compHole"+(n<filled?" on":"");
+      row.appendChild(h);
+    });
+  }
+  const left=pointLeft();
+  $("leftN").innerHTML=left?("コンプリートまで残り <span style=\"color:#ffe08a\">"+left+"</span>"):"コンプリート！";
+  if($("roundN")) $("roundN").textContent=(S.match||1)+"戦目: " + ((S.pair||0)?"裏":"表");
+  paintSc();
+  syncLockBtn();
+  syncWaitBtn();
+}
+function tap(i){
+  // 獲得済み（薄い）マスは誰も選べない。施錠後の鍵も見た目だけ
+  if(S.gone[i] && S.phase!=="reveal") return;
+  if(S.phase==="thief" && iAmThief()){
+    if(S.map[i]==="exit2" && exit2Locked()){
+      banner("施錠中");
+      return;
+    }
+    sfxPick();
+    S.pick=i;
+    S.waitAct=false;
+    learnPlayerHide(i,false);
+    if(S.mode==="pvp") send({type:"pick",i});
+    beginSearchThenCop();
+    return;
+  }
+  if(S.phase==="cop" && !iAmThief()){
+    if(S.map[i]==="exit2" && exit2Locked()){
+      banner("施錠中");
+      return;
+    }
+    sfxPick();
+    S.guess=i;
+    learnPlayerGuess(i,false);
+    if(S.mode==="pvp") send({type:"guess",i});
+    resolve();
+  }
+}
+function rewardOf(i){
+  const k=S.map[i];
+  if(k==="p50")return 50;if(k==="p100")return 100;if(k==="p150")return 150;
+  if(k==="p200")return 200;
+  if(k==="fade")return fadeN()*100;
+  return 0;
+}
+function doPoliceLock(fromCpu){
+  if(!S.hasKey || S.pendingLock) return;
+  if(S.phase!=="cop") return;
+  if(iAmThief() && !fromCpu) return;
+  if(!fromCpu) learnPlayerGuess(-1,true);
+  S.lockAct=true;
+  S.guess=-1;
+  S.preLock=false;
+  if(S.mode==="pvp") send({type:"lock"});
+  resolve();
+}
+async function resolve(){
+  if(S.resolving) return;
+  const g=gameGen;
+  S.resolving=true;
+  S.hidePick=true; S.phase="reveal"; paint();
+  if(!await sleep(550)){ S.resolving=false; return; }
+  if(!alive(g)){ S.resolving=false; return; }
+  S.hidePick=false; paint();
+  const waited=!!S.waitAct || S.pick<0;
+  const hit=!waited && !S.lockAct && S.guess>=0 && S.pick===S.guess;
+  if(hit){
+    if(iAmThief()){ banner("アウト"); sfxFound(); }
+    else { banner("捕獲"); sfxCatch(); }
+    if(!await sleep(900)){ S.resolving=false; return; }
+    if(!alive(g)){ S.resolving=false; return; }
+    S.resolving=false;
+    endGame(false);
+    return;
+  }
+  if(!hit){
+    if(S.lockAct){
+      banner("施錠");
+      S.pendingLock=true;
+      S.lockAct=false;
+    } else if(waited){
+      banner("様子見");
+    } else {
+      banner(iAmThief()?"セーフ":"失敗");
+    }
+    if(!await sleep(700)){ S.resolving=false; return; }
+    if(!alive(g)){ S.resolving=false; return; }
+  }
+  if(waited){
+    S.waitAct=false;
+    S.waitUsed=true;
+    S.turns=(S.turns||0)+1;
+    if(S.pendingLock){ S.hasKey=false; S.pendingLock=false; }
+    S.pick=-1; S.guess=-1; S.lockAct=false; S.waitAct=false; S.phase="thief";
+    S.resolving=false;
+    paint();
+    if(S.mode==="cpu" && !iAmThief()) later(cpuHide,cpuThinkMs());
+    else later(maybeThiefNoMove, 350);
+    return;
+  }
+  const k=S.map[S.pick];
+  if(k==="exit"||k==="exit2"){
+    if(k==="exit2"&&exit2Locked()){
+      banner("施錠中");
+      if(!await sleep(800)){ S.resolving=false; return; }
+      if(!alive(g)){ S.resolving=false; return; }
+      // 施錠中の出口×2は無効ターン（消さない）
+      S.turns=(S.turns||0)+1;
+      if(S.pendingLock){ S.hasKey=false; S.pendingLock=false; }
+      S.resolving=false;
+      S.pick=-1; S.guess=-1; S.lockAct=false; S.waitAct=false; S.phase="thief";
+      paint();
+      if(S.mode==="cpu" && !iAmThief()) later(cpuHide,cpuThinkMs());
+      else later(maybeThiefNoMove, 350);
+      return;
+    } else {
+      banner(k==="exit2"?"逃走 ×２":"逃走");
+      if(!await sleep(900)){ S.resolving=false; return; }
+      if(!alive(g)){ S.resolving=false; return; }
+      if(k==="exit2") S.pot*=2;
+      S.resolving=false;
+      endGame(true);
+      return;
+    }
+  } else if(k==="reset"){
+    COMP_IDX.forEach(i=>{ S.gone[i]=false; });
+    S.gone[KEY_IDX]=false;
+    S.fadeClaim=null;
+    S.turns=0;
+    S.compDone=false;
+  } else if(k==="key"){
+    S.hasKey=true;
+    S.gone[S.pick]=true;
+  } else {
+    const rw=rewardOf(S.pick);
+    S.pot+=rw;
+    if(k==="fade") S.fadeClaim=rw;
+    S.gone[S.pick]=true;
+  }
+  if(pointLeft()===0 && !S.compDone){
+    S.compDone=true;
+    S.pot+=1000;
+    sfxComplete();
+    banner("complete 1000 !!");
+    paint();
+    if(!await sleep(1100)){ S.resolving=false; return; } // banPop と同じ長さ。終わったら枠も消す
+    if(!alive(g)){ S.resolving=false; return; }
+    S.pick=-1; S.guess=-1;
+    paint();
+    if(!await sleep(300)){ S.resolving=false; return; }
+    if(!alive(g)){ S.resolving=false; return; }
+  } else {
+    if(!await sleep(300)){ S.resolving=false; return; }
+    if(!alive(g)){ S.resolving=false; return; }
+  }
+  if(k!=="reset") S.turns=(S.turns||0)+1;
+  if(S.pendingLock){
+    S.hasKey=false;
+    S.pendingLock=false;
+  }
+  S.resolving=false;
+  S.pick=-1; S.guess=-1; S.lockAct=false; S.waitAct=false; S.phase="thief";
+  paint();
+  if(S.mode==="cpu" && !iAmThief()) later(cpuHide,cpuThinkMs());
+  else later(maybeThiefNoMove, 350);
+}
+function endGame(escaped){
+  const box=document.querySelector('#result .box'); if(box){ box.style.padding=''; }
+  const thief=S.thief, cop=thief===1?2:1;
+  const amT=S.me===thief;
+  let title, color, got=0;
+  if(escaped){
+    const pts=S.pot||0;
+    S.totals[thief]+=pts; S.totals[cop]-=pts;
+    got=amT?pts:-pts;
+    title=amT?"逃走成功":"逮捕失敗";
+    color="#e8c36a";
+  } else {
+    title=amT?"強盗失敗":"逮捕成功";
+    color=amT?"#ff6b76":"#e8c36a";
+    got=0;
+  }
+  S.lastGot=got;
+  S.lastEscaped=!!escaped;
+  // 表＋裏の合計を「今回」に使う
+  if((S.pair||0)===0) S.matchGot=got;
+  else S.matchGot=(S.matchGot||0)+got;
+  const mine=S.totals[S.me]||0;
+  $("rTitle").textContent=title;
+  $("rTitle").style.fontSize=title.length>4?"32px":"40px";
+  $("rTitle").style.color=color;
+  const col=n=>n>0?"#6fdc8c":n<0?"#ff6b76":"#e8c36a";
+  S.pair=(S.pair||0)+1;
+  const mid=S.pair<2;
+  // 表・裏：タイトルのみ。「今回」なし。ポイント発生時だけ数字
+  let html="";
+  if(escaped && got!==0){
+    html='<div style="font-size:36px;font-weight:900;color:'+col(got)+'">'+(got>0?'+':'')+got+'</div>';
+  }
+  $("rPts").innerHTML=html;
+  clearResultWait();
+  if(mid){
+    $("rMid").style.display="flex";
+    $("rGate").style.display="none";
+    $("rFinal").style.display="none";
+  } else {
+    $("rMid").style.display="none";
+    $("rGate").style.display="flex";
+    $("rFinal").style.display="none";
+  }
+  show("result");
+}
+function showFinal(){
+  clearResultWait();
+  const box=document.querySelector('#result .box'); if(box){ box.style.padding='28px 18px'; }
+  const mine=S.totals[S.me]||0;
+  const col=n=>n>0?"#6fdc8c":n<0?"#ff6b76":"#e8c36a";
+  const got=(S.matchGot!=null?S.matchGot:S.lastGot)||0;
+  const fmt=n=>(n>0?'+':'')+n;
+  const row=(lab,val,c)=>'<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0"><div style="width:8em;text-align:center;color:#e8c36a;font-weight:800;font-size:15px;line-height:1.2">'+lab+'</div><div style="width:4.2em;text-align:center;font-size:30px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums;color:'+c+'">'+fmt(val)+'</div></div>';
+  let html=row('今回（'+(S.match||1)+'戦目）',got,col(got))+row('通算',mine,col(mine));
+  $("rTitle").textContent="最終結果";
+  $("rTitle").style.fontSize="36px";
+  $("rTitle").style.color="#e8c36a";
+  $("rPts").innerHTML=html;
+  $("rMid").style.display="none";
+  $("rGate").style.display="none";
+  $("rFinal").style.display="flex";
+}
+
+const LEARN_KEY="dorokei_learn_v1";
+function loadLearn(){
+  try{ return JSON.parse(localStorage.getItem(LEARN_KEY)||"{}")||{}; }catch(e){ return {}; }
+}
+function saveLearn(L){ try{ localStorage.setItem(LEARN_KEY, JSON.stringify(L)); }catch(e){} }
+function learnBump(path, n){
+  const L=loadLearn();
+  let o=L;
+  for(let i=0;i<path.length-1;i++){ const k=path[i]; o[k]=o[k]||{}; o=o[k]; }
+  const last=path[path.length-1];
+  o[last]=(o[last]||0)+(n||1);
+  L.n=(L.n||0)+1;
+  saveLearn(L);
+}
+function learnCtx(){
+  const pot=S.pot||0;
+  const potB=pot<150?"low":pot<350?"mid":"high";
+  const key=S.hasKey?"open":"locked";
+  const turn= (S.turns||0)<2?"early":(S.turns||0)<5?"mid":"late";
+  return {potB,key,turn};
+}
+function kindBucket(k){
+  if(!k) return "other";
+  if(k.indexOf("p")===0) return "point";
+  if(k==="fade") return "fade";
+  if(k==="key") return "key";
+  if(k==="reset") return "reset";
+  if(k==="exit"||k==="exit2") return "exit";
+  return "other";
+}
+function learnPlayerHide(i, waited){
+  if(S.mode!=="cpu" || !iAmThief()) return; // 人がドロボウのときだけ覚える
+  const c=learnCtx();
+  if(waited){ learnBump(["hide",c.potB,c.key,c.turn,"wait"],1); return; }
+  const b=kindBucket(S.map[i]);
+  learnBump(["hide",c.potB,c.key,c.turn,b],1);
+  learnBump(["pos", String(i)],1);
+}
+function learnPlayerGuess(i, locked){
+  if(S.mode!=="cpu" || iAmThief()) return; // 人がケイサツのときだけ
+  const c=learnCtx();
+  if(locked){ learnBump(["cop",c.potB,c.key,c.turn,"lock"],1); return; }
+  const b=kindBucket(S.map[i]);
+  learnBump(["cop",c.potB,c.key,c.turn,b],1);
+  learnBump(["guessPos", String(i)],1);
+}
+function learnWeight(path){
+  const L=loadLearn();
+  let o=L;
+  for(const k of path){ if(!o||typeof o!=="object") return 0; o=o[k]; }
+  return (typeof o==="number"?o:0);
+}
+function weightedPick(items, weightFn){
+  if(!items.length) return null;
+  let w=items.map(it=>{ const x=weightFn(it); return Math.max(0.05, x); });
+  let sum=w.reduce((a,b)=>a+b,0);
+  let r=Math.random()*sum;
+  for(let i=0;i<items.length;i++){ r-=w[i]; if(r<=0) return items[i]; }
+  return items[items.length-1];
+}
+
+function cpuOpenCells(){
+  const opts=[];
+  S.map.forEach((k,i)=>{
+    if(S.gone[i]) return; // 薄いマスは選べない
+    // 施錠中の出口×2は効果が無いので候補から外す
+    if(k==="exit2"&&exit2Locked()) return;
+    opts.push(i);
+  });
+  return opts;
+}
+function cpuThinkMs(){ const r=Math.random(); if(r<0.5) return 1000; if(r<0.8) return 2000; return 3000; }
+function cpuHide(){
+  if(S.phase!=="thief" || iAmThief()) return;
+  let opts=cpuOpenCells();
+  if((S.pot||0)<=0){
+    const nonEx=opts.filter(i=>{const k=S.map[i]; return k!=="exit"&&k!=="exit2";});
+    if(nonEx.length) opts=nonEx;
+  }
+  if(!opts.length){
+    if(!S.waitUsed){ S.pick=-1; S.waitAct=true; S.waitUsed=true; beginSearchThenCop(); return; }
+    endGame(false); return;
+  }
+  const c=learnCtx();
+  const baseBias=(k)=>{
+    let w=1;
+    const b=kindBucket(k);
+    w+=0.55*learnWeight(["hide",c.potB,c.key,c.turn,b]);
+    w+=0.25*learnWeight(["hide",c.potB,c.key,c.turn,"wait"])*0; // not for cells
+    // 人がよく取る種類をCPUドロボウも寄せる（少し）
+    if(c.key==="locked" && b==="key") w+=0.8;
+    if(c.potB==="high" && b==="exit") w+=1.2;
+    if(c.potB==="low" && b==="point") w+=0.6;
+    if(b==="fade") w+=0.4;
+    return w;
+  };
+  const waitW=0.08+0.5*learnWeight(["hide",c.potB,c.key,c.turn,"wait"]);
+  if(!S.waitUsed && Math.random()<Math.min(0.35, waitW/(6+waitW))){
+    S.pick=-1; S.waitAct=true; S.waitUsed=true; beginSearchThenCop(); return;
+  }
+  // 出口・鍵の既存ロジックを柔らかく残しつつ学習重みで選ぶ
+  let pool=opts.slice();
+  if(S.pot>=400){
+    const ex=opts.filter(x=>S.map[x]==="exit"||(S.map[x]==="exit2"&&S.hasKey));
+    if(ex.length && Math.random()<0.55) pool=ex;
+  } else if(!S.hasKey){
+    const keyI=opts.filter(x=>S.map[x]==="key");
+    if(keyI.length && Math.random()<0.35) pool=keyI;
+  }
+  const i=weightedPick(pool, idx=>{
+    let w=baseBias(S.map[idx]);
+    w+=0.35*learnWeight(["pos", String(idx)]);
+    // 消えてないマスの位置癖
+    if(S.map[idx]==="reset" && !S.gone.some(Boolean)) w*=0.2;
+    return w;
+  });
+  S.pick=i; S.waitAct=false; beginSearchThenCop();
+}
+function cpuGuess(){
+  if(S.phase!=="cop" || !iAmThief()) return;
+  const opts=cpuOpenCells();
+  const c=learnCtx();
+  if(S.hasKey && !S.pendingLock){
+    let lockP=0.2;
+    if(S.pot>=150) lockP=0.45;
+    if(S.pot>=300) lockP=0.65;
+    if(S.pot>=500) lockP=0.8;
+    lockP+=0.08*learnWeight(["cop",c.potB,c.key,c.turn,"lock"]);
+    // 人が鍵後に出口・高ポを狙う傾向が強いほど施錠を増やす／逆に捕まえに振る
+    const exitTend=learnWeight(["hide",c.potB,"open",c.turn,"exit"]);
+    const pointTend=learnWeight(["hide",c.potB,"open",c.turn,"point"])+learnWeight(["hide",c.potB,"open",c.turn,"fade"]);
+    if(exitTend>pointTend+1) lockP+=0.15;
+    else if(pointTend>exitTend+2) lockP-=0.12; // ポイント狙いなら捕まえに行く
+    lockP=Math.max(0.05, Math.min(0.9, lockP));
+    if(Math.random()<lockP){
+      doPoliceLock(true);
+      return;
+    }
+  }
+  let candidates=opts.slice();
+  const pot=S.pot||0;
+  const turns=S.turns||0;
+  const nonExit=candidates.filter(i=>{ const k=S.map[i]; return k!=="exit"&&k!=="exit2"; });
+  if(nonExit.length){
+    if(pot<200 || turns===0) candidates=nonExit;
+    else if(pot<400 && Math.random()<0.85) candidates=nonExit;
+  }
+  if(!candidates.length){
+    if(S.hasKey && !S.pendingLock){ doPoliceLock(true); return; }
+    S.guess=-1; resolve(); return;
+  }
+  S.guess=weightedPick(candidates, idx=>{
+    const k=S.map[idx];
+    const b=kindBucket(k);
+    let w=1;
+    w+=0.7*learnWeight(["hide",c.potB,c.key,c.turn,b]); // 相手の潜伏傾向
+    w+=0.45*learnWeight(["cop",c.potB,c.key,c.turn,b]); // 自分の当て癖の補強
+    w+=0.4*learnWeight(["pos", String(idx)]);
+    w+=0.25*learnWeight(["guessPos", String(idx)]);
+    if(b==="point"||b==="fade"||b==="key") w+=0.5;
+    if(b==="exit" && pot<250) w*=0.35;
+    return w;
+  });
+  resolve();
+}
+let gameGen=0;
+const gameTimers=new Set();
+function bumpGameGen(){ gameGen++; }
+function alive(g){ return g===gameGen; }
+function clearGameTimers(){
+  gameTimers.forEach(id=>{ try{ clearTimeout(id); }catch(e){} });
+  gameTimers.clear();
+}
+function later(fn, ms){
+  const g=gameGen;
+  const id=setTimeout(()=>{
+    gameTimers.delete(id);
+    if(!alive(g)) return;
+    try{ fn(); }catch(e){ console.warn(e); }
+  }, ms);
+  gameTimers.add(id);
+  return id;
+}
+function sleep(ms){
+  const g=gameGen;
+  return new Promise(r=>{
+    const id=setTimeout(()=>{ gameTimers.delete(id); r(alive(g)); }, ms);
+    gameTimers.add(id);
+  });
+}
+function clearAllBanners(){
+  clearHoldBanner();
+  const el=$("banner");
+  if(!el) return;
+  el.className="banner";
+  el.textContent="";
+  el.style.top=""; el.style.left=""; el.style.transform="";
+}
+function hardStopPlay(){
+  bumpGameGen();
+  clearGameTimers();
+  clearAllBanners();
+  clearResultWait();
+  try{ $("ask").classList.remove("on"); }catch(e){}
+  S.resolving=false;
+  S.phase="idle";
+  S.pick=-1; S.guess=-1;
+  S.lockAct=false; S.waitAct=false; S.preLock=false;
+  S.hidePick=false;
+}
+async function spinRole(thief){
+  const g=gameGen;
+  show("first");
+  for(let i=0;i<10;i++){
+    if(!alive(g)) return false;
+    const thiefSide=i%2===0;
+    $("firstW").textContent=thiefSide?"ドロボウ":"ケイサツ";
+    $("firstW").className="w "+(thiefSide?"thief":"cop");
+    if(!await sleep(90+i*12)) return false;
+  }
+  if(!alive(g)) return false;
+  const mine=thief===S.me;
+  $("firstW").textContent=mine?"ドロボウ":"ケイサツ";
+  $("firstW").className="w "+(mine?"thief":"cop");
+  if(!await sleep(800)) return false;
+  return alive(g);
+}
+function newBoard(){
+  S.map=KINDS.slice(); S.gone=Array(9).fill(false); S.pot=0; S.compDone=false; S.pick=-1; S.guess=-1; S.phase="thief"; S.hasKey=false; S.fadeClaim=null; S.turns=0; S.pendingLock=false; S.lockAct=false; S.preLock=false; S.waitAct=false; S.waitUsed=false; S.resolving=false;
+}
+function setWaitBtn(btn, waiting, label){
+  if(!btn) return;
+  if(!btn.dataset.label) btn.dataset.label=label||btn.textContent;
+  if(waiting){
+    btn.textContent="相手待ち";
+    btn.disabled=true;
+  } else {
+    btn.textContent=btn.dataset.label;
+    btn.disabled=false;
+  }
+}
+function clearResultWait(){
+  setWaitBtn($("btnNext"), false, "交代");
+  setWaitBtn($("btnAgain"), false, "もう1度");
+  const again=$("btnAgain"); if(again) again.style.display="";
+}
+
+async function startMatch(keepRole){
+  bumpGameGen();
+  clearGameTimers();
+  clearAllBanners();
+  const g=gameGen;
+  if(!keepRole) S.thief=Math.random()<.5?1:2;
+  newBoard();
+  S.votes={};
+  clearResultWait();
+  if(S.mode==="pvp"&&S.host) send({type:"start",thief:S.thief,map:S.map.slice(),keep:!!keepRole,pair:S.pair||0,match:S.match||1,matchGot:S.matchGot||0,totals:(S.totals||[0,0,0]).slice()});
+  if(!keepRole){
+    const ok=await spinRole(S.thief);
+    if(!ok || !alive(g)) return;
+  }
+  if(!alive(g)) return;
+  show("game"); paint();
+  if(S.mode==="cpu" && !iAmThief()) later(cpuHide,cpuThinkMs());
+}
+function bothVoted(bag){ return !!(bag && bag[1] && bag[2]); }
+
+function askNext(){
+  if(S.mode!=="pvp"){ S.thief=S.thief===1?2:1; startMatch(true); return; }
+  S.votes.next=S.votes.next||{};
+  if(S.votes.next[S.me]) return;
+  S.votes.next[S.me]=true;
+  send({type:"vote"});
+  setWaitBtn($("btnNext"), true, "交代");
+  tryStartNext();
+}
+function tryStartNext(){
+  if(!bothVoted(S.votes.next)) return;
+  S.votes.next={};
+  clearResultWait();
+  // ホストだけが役交代して開始。ゲストは start を待つ
+  if(S.host){
+    S.thief=S.thief===1?2:1;
+    startMatch(true);
+  }
+}
+function askAgain(){
+  if(S.mode!=="pvp"){
+    S.pair=0; S.matchGot=0; S.match=(S.match||1)+1;
+    startMatch(false);
+    return;
+  }
+  S.votes.again=S.votes.again||{};
+  if(S.votes.again[S.me]) return;
+  S.votes.again[S.me]=true;
+  send({type:"voteAgain"});
+  setWaitBtn($("btnAgain"), true, "もう1度");
+  tryStartAgain();
+}
+function tryStartAgain(){
+  if(!bothVoted(S.votes.again)) return;
+  S.votes.again={};
+  clearResultWait();
+  if(S.host){
+    S.pair=0; S.matchGot=0;
+    S.match=(S.match||1)+1;
+    startMatch(false);
+  }
+}
+function pickMode(cpu){
+  ensureAudio();
+  S.mode=cpu?"cpu":"pvp"; S.me=1; S.host=true;
+  if(cpu) startMatch(false);
+  else show("room");
+}
+function askQuit(){$("ask").classList.add("on")}
+let netAlive=false;
+let bootTimer=null;
+function clearBootTimer(){ if(bootTimer){ clearTimeout(bootTimer); bootTimer=null; } }
+function leaveNet(sendBye){
+  // 先に再接続を禁止（destroy中の reconnect で合言葉IDが残るのを防ぐ）
+  netAlive=false;
+  clearConnTimer();
+  clearBootTimer();
+  if(sendBye){ try{send({type:"bye"})}catch(e){} }
+  const c=S.conn, p=S.peer, ch=S.localCh, sig=S.localSig;
+  S.conn=null; S.peer=null; S.localCh=null; S.localSig=null;
+  try{ if(c) c.close(); }catch(e){}
+  try{ if(ch) ch.close(); }catch(e){}
+  try{ if(sig) sig.close(); }catch(e){}
+  try{
+    if(p){
+      try{ p.disconnect(); }catch(e){}
+      try{ p.destroy(); }catch(e){}
+    }
+  }catch(e){}
+}
+function backFromRoom(){
+  hardStopPlay();
+  leaveNet(false);
+  show("mode");
+}
+function goTitle(){
+  hardStopPlay();
+  S.pair=0; S.matchGot=0; S.match=1; S.votes={}; S.totals=[0,0,0];
+  leaveNet(true);
+  show("mode");
+}
+function send(m){try{if(S.conn&&S.conn.open)S.conn.send(m)}catch(e){}}
+
+function onNet(m){
+  if(!m||!m.type)return;
+  if(m.type==="chat"){showBubble(m.text||"",false);return;}
+  if(m.type==="hello"&&S.host){ const roomOn=$("room")&&$("room").classList.contains("on"); if(!roomOn&&document.querySelector("#game.on,#first.on,#result.on")) return; S.totals=[0,0,0]; S.pair=0; S.matchGot=0; S.match=1; startMatch(false); return; }
+  if(m.type==="start"&&!S.host){
+    newBoard();
+    S.map=m.map.slice?m.map.slice():m.map;
+    S.thief=m.thief;
+    if(m.pair!=null) S.pair=m.pair;
+    if(m.match!=null) S.match=m.match;
+    if(m.matchGot!=null) S.matchGot=m.matchGot;
+    if(m.totals&&m.totals.length) S.totals=m.totals.slice();
+    S.votes={};
+    clearResultWait();
+    bumpGameGen();
+    clearGameTimers();
+    clearAllBanners();
+    const g=gameGen;
+    const go=()=>{ if(!alive(g)) return; show("game"); paint(); };
+    if(m.keep) go(); else spinRole(S.thief).then(ok=>{ if(ok) go(); });
+    return;
+  }
+  if(m.type==="pick"){
+    if(S.phase!=="thief"||S.resolving) return;
+    const i=m.i|0;
+    if(i<0||i>8||S.gone[i]||(S.map[i]==="exit2"&&exit2Locked())) return;
+    S.pick=i; S.waitAct=false; beginSearchThenCop(); return;
+  }
+  if(m.type==="wait"){ if(S.phase!=="thief"||S.resolving||S.waitUsed) return; S.pick=-1; S.waitAct=true; S.waitUsed=true; beginSearchThenCop(); return; }
+  if(m.type==="stuck"){ if(S.phase!=="thief"||S.resolving) return; endGame(false); return; }
+  if(m.type==="guess"){
+    if(S.phase!=="cop"||S.resolving) return;
+    const i=(m.i==null?-1:m.i|0);
+    // i===-1 は相手に合法手が無いときの自動外れ
+    if(i!==-1 && (i<0||i>8||S.gone[i]||(S.map[i]==="exit2"&&exit2Locked()))) return;
+    S.guess=i; S.lockAct=false; resolve(); return;
+  }
+    if(m.type==="preLock"){ S.preLock=true; syncLockBtn(); return; }
+  if(m.type==="lock"){ if(S.phase!=="cop"||S.resolving||!S.hasKey) return; S.lockAct=true; S.guess=-1; resolve(); return; }
+  if(m.type==="vote"){
+    S.votes.next=S.votes.next||{};
+    S.votes.next[S.me===1?2:1]=true;
+    tryStartNext();
+    return;
+  }
+  if(m.type==="voteAgain"){
+    S.votes.again=S.votes.again||{};
+    S.votes.again[S.me===1?2:1]=true;
+    tryStartAgain();
+    return;
+  }
+  if(m.type==="bye"){ onPeerLost("相手が退出しました"); return; }
+}
+
+function pid(c){return "doro"+[...c.toLowerCase()].map(ch=>ch.codePointAt(0).toString(36)).join("").slice(0,28)}
+
+let connTimer=null;
+function clearConnTimer(){ if(connTimer){ clearTimeout(connTimer); connTimer=null; } }
+
+function onPeerLost(msg){
+  clearConnTimer();
+  const st=$("roomSt");
+  if(st) st.textContent=msg||"相手との接続が切れました";
+  leaveNet(false);
+  const inPlay=!!document.querySelector("#game.on,#first.on,#result.on");
+  if(inPlay){
+    $("rTitle").textContent="切断";
+    $("rTitle").style.color="#ff6b76";
+    $("rPts").innerHTML='<div style="margin-top:8px">相手との接続が切れました</div>';
+    $("rMid").style.display="none";
+    $("rGate").style.display="none";
+    $("rFinal").style.display="flex";
+    // 切断後の「もう1度」は投票待ちで詰むため隠す
+    const again=$("btnAgain"); if(again) again.style.display="none";
+    show("result");
+  }
+}
+
+function wireConn(c, asHost){
+  S.conn=c;
+  c.on("data", onNet);
+  c.on("close", ()=>onPeerLost("相手との接続が切れました"));
+  c.on("error", err=>{
+    console.warn(err);
+    if(!asHost) $("roomSt").textContent="接続エラー。合言葉と作成側を確認して再試行";
+  });
+  c.on("open", ()=>{
+    closeLocalSig();
+    if(asHost) $("roomSt").textContent="相手が入室しました";
+  });
+}
+
+// 同じ端末の別タブ用（PeerJSが不通でも部屋をつなぐ）
+function makeLocalConn(code){
+  const ch=new BroadcastChannel("dorokei-bc-"+pid(code));
+  const handlers={data:[],open:[],close:[],error:[]};
+  const c={
+    open:false,
+    _ch:ch,
+    send(m){ try{ ch.postMessage({kind:"data",payload:m}); }catch(e){} },
+    close(){
+      try{ ch.postMessage({kind:"bye"}); }catch(e){}
+      try{ ch.close(); }catch(e){}
+      c.open=false;
+      handlers.close.forEach(fn=>{ try{fn()}catch(e){} });
+    },
+    on(ev,fn){ if(handlers[ev]) handlers[ev].push(fn); }
+  };
+  ch.onmessage=(ev)=>{
+    const msg=ev&&ev.data;
+    if(!msg||!msg.kind) return;
+    if(msg.kind==="data"){ handlers.data.forEach(fn=>{ try{fn(msg.payload)}catch(e){} }); }
+    if(msg.kind==="bye"){ c.open=false; handlers.close.forEach(fn=>{ try{fn()}catch(e){} }); }
+  };
+  S.localCh=ch;
+  c._markOpen=()=>{
+    if(c.open) return;
+    c.open=true;
+    handlers.open.forEach(fn=>{ try{fn()}catch(e){} });
+  };
+  return c;
+}
+
+function closeLocalSig(){
+  const s=S.localSig;
+  S.localSig=null;
+  try{ if(s) s.close(); }catch(e){}
+}
+function armLocalRoom(host,code){
+  if(typeof BroadcastChannel==="undefined") return;
+  closeLocalSig();
+  const roomKey=pid(code);
+  const signal=new BroadcastChannel("dorokei-sig-"+roomKey);
+  S.localSig=signal;
+  if(host){
+    signal.onmessage=(ev)=>{
+      const msg=ev&&ev.data;
+      if(!netAlive || !msg || msg.kind!=="join") return;
+      if(S.conn && S.conn.open) return;
+      try{ signal.postMessage({kind:"ready"}); }catch(e){}
+      closeLocalSig();
+      const c=makeLocalConn(code);
+      wireConn(c, true);
+      c._markOpen();
+      $("roomSt").textContent="相手が入室しました（同じ端末）";
+    };
+  }else{
+    signal.onmessage=(ev)=>{
+      const msg=ev&&ev.data;
+      if(!netAlive || !msg || msg.kind!=="ready") return;
+      if(S.conn && S.conn.open) return;
+      clearConnTimer();
+      closeLocalSig();
+      const c=makeLocalConn(code);
+      wireConn(c, false);
+      c._markOpen();
+      send({type:"hello"});
+      $("roomSt").textContent="接続した。開始待ち…";
+    };
+    try{ signal.postMessage({kind:"join"}); }catch(e){}
+    setTimeout(()=>{ try{ if(netAlive && S.localSig===signal && !(S.conn&&S.conn.open)) signal.postMessage({kind:"join"}); }catch(e){} }, 800);
+    setTimeout(()=>{ try{ if(netAlive && S.localSig===signal && !(S.conn&&S.conn.open)) signal.postMessage({kind:"join"}); }catch(e){} }, 2000);
+  }
+}
+
+function boot(host,code,retry){
+  clearConnTimer();
+  clearBootTimer();
+  $("roomSt").textContent="接続中…";
+  const opts={
+    host:"0.peerjs.com", port:443, path:"/", secure:true,
+    debug:1,
+    config:{iceServers:[
+      {urls:"stun:stun.l.google.com:19302"},
+      {urls:"stun:stun1.l.google.com:19302"},
+      {urls:"turn:openrelay.metered.ca:80", username:"openrelayproject", credential:"openrelayproject"},
+      {urls:"turn:openrelay.metered.ca:443", username:"openrelayproject", credential:"openrelayproject"},
+      {urls:"turn:openrelay.metered.ca:443?transport=tcp", username:"openrelayproject", credential:"openrelayproject"}
+    ]}
+  };
+  // boot 前に必ず切断（再接続禁止フラグ込み）
+  netAlive=false;
+  const oldC=S.conn, oldP=S.peer;
+  S.conn=null; S.peer=null;
+  try{ if(oldC) oldC.close(); }catch(e){}
+  try{ if(oldP){ try{oldP.disconnect();}catch(e){} try{oldP.destroy();}catch(e){} } }catch(e){}
+
+  const peer=new Peer(host?pid(code):undefined, opts);
+  S.peer=peer; S.host=host; S.me=host?1:2; S.mode="pvp"; S.votes={}; S.totals=[0,0,0]; S.pair=0; S.matchGot=0; S.match=1; S.resolving=false;
+  const tries=(retry|0);
+
+  peer.on("error", e=>{
+    clearConnTimer();
+    const t=(e && e.type) || "";
+    if(t==="unavailable-id"){
+      if(host && tries<10){
+        $("roomSt").textContent="前の部屋を解放中…("+(tries+1)+")";
+        netAlive=false;
+        try{ peer.destroy(); }catch(err){}
+        if(S.peer===peer) S.peer=null;
+        clearBootTimer();
+        bootTimer=setTimeout(()=>boot(true,code,tries+1), 1000+tries*500);
+        return;
+      }
+      $("roomSt").textContent="その合言葉は使用中。少し待つか、別の言葉にしてください";
+    }
+    else if(t==="peer-unavailable") $("roomSt").textContent="部屋が見つかりません。作成側が待機中か確認";
+    else if(t==="network") $("roomSt").textContent="ネットワークエラー。もう一度どうぞ";
+    else $("roomSt").textContent="接続エラー（"+t+"）。再試行してください";
+  });
+
+  peer.on("disconnected", ()=>{
+    // タイトルに戻ったあとに勝手に掴み直さない
+    if(!netAlive || S.peer!==peer) return;
+    try{ peer.reconnect(); }catch(e){}
+  });
+
+  peer.on("open", ()=>{
+    if(S.peer!==peer) return;
+    netAlive=true;
+    if(host){
+      $("roomSt").textContent="合言葉 "+code+" で待機中";
+      peer.on("connection", c=>{
+        if(!netAlive || S.peer!==peer) return;
+        if(S.conn && S.conn.open){ try{c.close()}catch(e){} return; }
+        wireConn(c, true);
+      });
+      armLocalRoom(true, code);
+    } else {
+      $("roomSt").textContent="部屋に接続中…";
+      const c=peer.connect(pid(code), {reliable:true});
+      wireConn(c, false);
+      c.on("open", ()=>{
+        clearConnTimer();
+        closeLocalSig();
+        send({type:"hello"});
+        $("roomSt").textContent="接続した。開始待ち…";
+      });
+      armLocalRoom(false, code);
+      connTimer=setTimeout(()=>{
+        if(!(S.conn && S.conn.open)){
+          $("roomSt").textContent="時間切れ。合言葉と作成側を確認して再試行";
+          try{c.close()}catch(e){}
+        }
+      }, 20000);
+    }
+  });
+}
+function makeRoom(){
+  ensureAudio();
+  const c=($("code").value||"").trim();
+  if([...c].length<3){ $("roomSt").textContent="3文字以上"; return; }
+  leaveNet(false);
+  $("roomSt").textContent="部屋を準備中…";
+  clearBootTimer();
+  // 仲介サーバーが前のIDを離すまで少し待つ
+  bootTimer=setTimeout(()=>boot(true,c,0), 1200);
+}
+bootChat(function(text){send({type:"chat",text:text});});
+function joinRoom(){
+  ensureAudio();
+  const c=($("code").value||"").trim();
+  if([...c].length<3){ $("roomSt").textContent="3文字以上"; return; }
+  leaveNet(false);
+  $("roomSt").textContent="接続中…";
+  clearBootTimer();
+  bootTimer=setTimeout(()=>boot(false,c,0), 400);
+}
+
+</script>
+</body>
+</html>
