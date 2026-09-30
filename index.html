@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<!-- v:1790620100 -->
+<!-- v:1790620200 -->
 <title>ドロケイ（鍵・最終結果）</title>
+<link rel="preload" as="image" href="exit.png?v=11"/>
+<link rel="preload" as="image" href="exit2.png?v=17"/>
+<link rel="preload" as="image" href="reset.png?v=4"/>
+<link rel="preload" as="image" href="wait.png?v=1"/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=RocknRoll+One&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
@@ -239,6 +243,7 @@ function sfxLock(){ ensureAudio(); beep(340,90,"square",.1); setTimeout(()=>beep
 function sfxComplete(){ ensureAudio(); beep(523,80,"sine",.09); setTimeout(()=>beep(659,80,"sine",.09),70); setTimeout(()=>beep(784,80,"sine",.09),140); setTimeout(()=>beep(1046,220,"sine",.11),220); }
 const $=id=>document.getElementById(id);
 const KINDS=["p50","key","p100","p150","p200","fade","exit","reset","exit2"];
+(function(){["exit.png?v=11","exit2.png?v=17","reset.png?v=4","wait.png?v=1"].forEach(function(s){var i=new Image();i.src=s;});})();
 const COMP_IDX=[0,2,3,4,5]; // 1,3,4,5,6マス（コンプリート＆リセット対象）
 const KEY_IDX=1; // 2マス目（鍵）
 function isCompCell(i){return COMP_IDX.indexOf(i)>=0;}
@@ -429,7 +434,7 @@ function paintCell(c,k,i){
     }
   } else if(k==="exit"){
     const img=document.createElement("img");
-    img.src="exit.png?v=10"; img.alt="出口";
+    img.src="exit.png?v=11"; img.alt="出口";
     tx.appendChild(img);
   } else if(k==="fade"){
     if(S.gone[i] && S.fadeClaim!=null) tx.textContent=String(S.fadeClaim);
