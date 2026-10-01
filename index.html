@@ -576,17 +576,26 @@ async function resolve(){
     return;
   }
   if(!hit){
+    // 同一ターンに出口で逃走成功なら施錠エフェクトは出さない
+    const escapeNow=!waited && S.pick>=0 && (S.map[S.pick]==="exit"||(S.map[S.pick]==="exit2"&&!exit2Locked()));
+    let skipRevealBanner=false;
     if(S.lockAct){
-      banner("施錠");
-      S.pendingLock=true;
+      if(escapeNow){
+        skipRevealBanner=true;
+      } else {
+        banner("施錠");
+        S.pendingLock=true;
+      }
       S.lockAct=false;
     } else if(waited){
       banner("様子見");
     } else {
       banner(iAmThief()?"セーフ":"失敗");
     }
-    if(!await sleep(700)){ S.resolving=false; return; }
-    if(!alive(g)){ S.resolving=false; return; }
+    if(!skipRevealBanner){
+      if(!await sleep(700)){ S.resolving=false; return; }
+      if(!alive(g)){ S.resolving=false; return; }
+    }
   }
   if(waited){
     S.waitAct=false;
