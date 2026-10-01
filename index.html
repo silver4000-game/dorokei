@@ -264,7 +264,7 @@ function lab(k,fadeN){
 }
 const S={mode:"cpu",me:1,host:true,thief:1,map:KINDS.slice(),gone:Array(9).fill(false),pot:0,phase:"thief",pick:-1,guess:-1,totals:[0,0,0],pair:0,match:1,pairPts:[0,0,0],votes:{},conn:null,peer:null,hasKey:false,fadeClaim:null,turns:0,pendingLock:false,lockAct:false,preLock:false,waitUsed:false};
 
-const CHAT_QUICK=["あと何回やる？","あと3回","あと5回","まだやめない","ちょっと待って","まだ？","笑"];
+const CHAT_QUICK=["あと何回やる？","あと3回","あと5回","まだやめない","笑","何回戦までやる？","まじか"];
 function bubbleHost(mine){
   const id=mine?"bubblesNear":"bubblesFar";
   let w=$(id);
