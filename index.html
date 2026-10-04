@@ -39,12 +39,29 @@ html,body{margin:0;height:100%;height:100dvh;font-family:"Hiragino Kaku Gothic P
    --safari-bar: 83px on home-indicator iPhones, 50px on older phones. */
 html.no-bar #app{height:calc(100dvh - var(--safari-bar, 83px));max-height:calc(100dvh - var(--safari-bar, 83px))}
 /* chat/lock/wait are position:absolute inside .board, so they follow the locked app */
+html.no-bar:has(#first.on),
+html.no-bar:has(#first.on) body,
+html.no-bar:has(#result.on),
+html.no-bar:has(#result.on) body,
+html.no-bar:has(#ask.on),
+html.no-bar:has(#ask.on) body{background:#0a100c}
+html.no-bar #first.on,
+html.no-bar #result.on,
+html.no-bar #ask.on{background:#0a100c}
 
 @media (display-mode: standalone) and (pointer: coarse),
        (display-mode: fullscreen) and (pointer: coarse),
        (display-mode: minimal-ui) and (pointer: coarse){
   #app{height:calc(100dvh - var(--safari-bar, 83px));max-height:calc(100dvh - var(--safari-bar, 83px))}
-  
+  html:has(#first.on),
+  html:has(#first.on) body,
+  html:has(#result.on),
+  html:has(#result.on) body,
+  html:has(#ask.on),
+  html:has(#ask.on) body{background:#0a100c}
+  #first.on,
+  #result.on,
+  #ask.on{background:#0a100c}
 }
 section{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
 section.on{display:flex}
