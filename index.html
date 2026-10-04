@@ -3,8 +3,24 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<link rel="apple-touch-icon" href="apple-touch-icon-v2.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192-v2.png">
+<!-- layout: safari-bar-lock-20261004 -->
+<meta name="dorokei-rev" content="20261004d-safari-lock">
+<script>
+(function(){
+  var nav=navigator, mm=window.matchMedia;
+  function q(s){return !!(mm&&mm.call(window,s).matches)}
+  var hs=nav.standalone===true||q('(display-mode: standalone)')||q('(display-mode: fullscreen)')||q('(display-mode: minimal-ui)');
+  if(!hs||!(nav.maxTouchPoints>0)) return;
+  var shortSide=Math.min(screen.width,screen.height);
+  var longSide=Math.max(screen.width,screen.height);
+  var portrait=window.innerHeight>=window.innerWidth;
+  var bar=(shortSide<520&&longSide>=812)?(portrait?83:50):(portrait?50:44);
+  document.documentElement.classList.add('no-bar');
+  document.documentElement.style.setProperty('--safari-bar', bar+'px');
+})();
+</script>
+<link rel="apple-touch-icon" href="apple-touch-icon-v2.png?v=20261004d">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192-v2.png?v=20261004d">
 <!-- v:1790841000 -->
 <title>ドロケイ（鍵・最終結果）</title>
 <link rel="preload" as="image" href="data:image/png;base64,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"/>
@@ -16,6 +32,20 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{margin:0;height:100%;height:100dvh;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:radial-gradient(ellipse at center,#286848,#142c22);color:#f4ead0;overflow:hidden}
+#app{height:100%;height:100dvh;position:relative}
+
+/* Home screen has no white Safari bar, so the viewport is taller than Safari.
+   Pin #app to the Safari-with-bar height. Extra space stays the page background.
+   --safari-bar: 83px on home-indicator iPhones, 50px on older phones. */
+html.no-bar #app{height:calc(100dvh - var(--safari-bar, 83px));max-height:calc(100dvh - var(--safari-bar, 83px))}
+/* chat/lock/wait are position:absolute inside .board, so they follow the locked app */
+
+@media (display-mode: standalone) and (pointer: coarse),
+       (display-mode: fullscreen) and (pointer: coarse),
+       (display-mode: minimal-ui) and (pointer: coarse){
+  #app{height:calc(100dvh - var(--safari-bar, 83px));max-height:calc(100dvh - var(--safari-bar, 83px))}
+  
+}
 section{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
 section.on{display:flex}
 #mode{padding:0;display:none}
@@ -111,6 +141,7 @@ input{width:min(92vw,280px);padding:12px;border-radius:12px;border:1px solid #e8
 </style>
 </head>
 <body>
+<div id="app">
 <section id="mode" class="on">
 <h1>ドロケイ</h1>
 <div class="hero"><i></i><i></i><i></i><i></i><i></i><i class="blue"></i><i class="red"></i><i></i><i></i></div>
@@ -1398,5 +1429,6 @@ function joinRoom(){
 }
 
 </script>
+</div>
 </body>
 </html>
