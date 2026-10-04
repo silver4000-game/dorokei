@@ -241,8 +241,25 @@ function beep(freq,dur,type,vol){
     o.start(now); o.stop(now+d+0.04);
   }catch(e){}
 }
-function sfxPick(){ ensureAudio(); beep(520,110,"square",.09); }
-document.addEventListener("click",function(e){ const b=e.target&&e.target.closest&&e.target.closest("button"); if(b&&!b.disabled) sfxPick(); },true);
+function beepUi(freq,dur,type,vol){
+  try{
+    const ctx=ensureAudio(); if(!ctx) return;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    const now=ctx.currentTime;
+    const d=Math.max(0.03,(dur||50)/1000);
+    const v=vol||0.03;
+    o.type=type||"sine";
+    o.frequency.setValueAtTime(freq, now);
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(v, now+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, now+d);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now); o.stop(now+d+0.02);
+  }catch(e){}
+}
+function sfxTap(){ beepUi(540,48,"sine",0.028); }
+function sfxCard(){ beepUi(860,36,"triangle",0.024); }
+document.addEventListener("click",function(e){ const b=e.target&&e.target.closest&&e.target.closest("button"); if(b&&!b.disabled) sfxTap(); },true);
 function sfxCatch(){ ensureAudio(); beep(523,90,"sine",.09); setTimeout(()=>beep(659,90,"sine",.09),80); setTimeout(()=>beep(784,160,"sine",.1),160); }
 function sfxFound(){ ensureAudio(); beep(420,140,"sawtooth",.14); setTimeout(()=>beep(280,160,"sawtooth",.14),100); setTimeout(()=>beep(160,280,"triangle",.16),220); }
 function sfxLock(){ ensureAudio(); beep(340,90,"square",.1); setTimeout(()=>beep(220,140,"square",.12),70); setTimeout(()=>beep(160,180,"triangle",.1),160); }
@@ -531,7 +548,7 @@ function tap(i){
       banner("施錠中");
       return;
     }
-    sfxPick();
+    sfxCard();
     S.pick=i;
     S.waitAct=false;
     learnPlayerHide(i,false);
@@ -544,7 +561,7 @@ function tap(i){
       banner("施錠中");
       return;
     }
-    sfxPick();
+    sfxCard();
     S.guess=i;
     learnPlayerGuess(i,false);
     if(S.mode==="pvp") send({type:"guess",i});
