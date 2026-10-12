@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <!-- layout: safari-bar-lock-20261004 -->
-<meta name="dorokei-rev" content="20261004d-safari-lock">
+<meta name="dorokei-rev" content="20261013a-redo-unify">
 <script>
 (function(){
   var nav=navigator, mm=window.matchMedia;
@@ -42,12 +42,9 @@ html.no-bar #app{height:calc(100dvh - var(--safari-bar, 83px));max-height:calc(1
 html.no-bar:has(#first.on),
 html.no-bar:has(#first.on) body,
 html.no-bar:has(#result.on),
-html.no-bar:has(#result.on) body,
-html.no-bar:has(#ask.on),
-html.no-bar:has(#ask.on) body{background:#0a100c}
+html.no-bar:has(#result.on) body{background:#0a100c}
 html.no-bar #first.on,
-html.no-bar #result.on,
-html.no-bar #ask.on{background:#0a100c}
+html.no-bar #result.on{background:#0a100c}
 
 @media (display-mode: standalone) and (pointer: coarse),
        (display-mode: fullscreen) and (pointer: coarse),
@@ -56,12 +53,9 @@ html.no-bar #ask.on{background:#0a100c}
   html:has(#first.on),
   html:has(#first.on) body,
   html:has(#result.on),
-  html:has(#result.on) body,
-  html:has(#ask.on),
-  html:has(#ask.on) body{background:#0a100c}
+  html:has(#result.on) body{background:#0a100c}
   #first.on,
-  #result.on,
-  #ask.on{background:#0a100c}
+  #result.on{background:#0a100c}
 }
 section{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
 section.on{display:flex}
@@ -120,8 +114,10 @@ input{width:min(92vw,280px);padding:12px;border-radius:12px;border:1px solid #e8
 @keyframes banPop{0%{transform:translate(-50%,0) scale(.55);opacity:0}15%{opacity:1;transform:translate(-50%,0) scale(1.05)}80%{opacity:1}100%{opacity:0}}
 #first .w{font-size:36px;font-weight:900;padding:12px 24px;border:3px solid currentColor;border-radius:16px}
 #first .w.thief{color:#ff5a5a}#first .w.cop{color:#7a8cff}
-#result,#first,#ask{background:#0a100cf2;z-index:90}
-#ask{display:none}#ask.on{display:flex}
+#result,#first{background:#0a100cf2;z-index:90}
+#ask{display:none;position:fixed;inset:0;background:#000c;z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:0}#ask.on{display:flex}
+#ask .redoRow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#ask button{appearance:auto;box-sizing:border-box;margin:0;padding:1px 6px;width:auto;height:auto;cursor:pointer;border:2px solid #e8c36a;background:linear-gradient(#4a3210,#2c1c08);color:#e8c36a;border-radius:12px;min-height:46px;min-width:88px;font-weight:800;font-size:15px;line-height:normal;letter-spacing:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif}#ask button.gold{background:linear-gradient(#f0d27a,#c9a03a);color:#1a1208;border:0}
 .box{background:#1a140c;border:2px solid #e8c36a;border-radius:16px;padding:16px;text-align:center;width:min(92vw,340px)}
 #rTitle{font-size:40px;font-weight:900}
 .gap{width:100%;flex:1;display:flex;align-items:center;justify-content:center;min-height:28px}
@@ -261,8 +257,8 @@ input{width:min(92vw,280px);padding:12px;border-radius:12px;border:1px solid #e8
     <button onclick="goTitle()">やめる</button>
   </div>
 </div></section>
-<section id="ask"><div class="box"><div style="font-weight:800;margin-bottom:12px">モード選択に戻りますか？</div>
-<div class="row"><button onclick="goTitle()">戻る</button><button onclick="$('ask').classList.remove('on')">キャンセル</button></div></div></section>
+<section id="ask"><div style="color:#e8c36a;font-weight:800">モード選択に戻りますか？</div>
+<div class="redoRow"><button class="gold" onclick="goTitle()">はい</button><button onclick="$('ask').classList.remove('on')">いいえ</button></div></section>
 <div id="bannerHome"><div class="banner" id="banner"></div></div>
 <script>
 
