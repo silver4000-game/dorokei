@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <!-- layout: safari-bar-lock-20261004 -->
-<meta name="dorokei-rev" content="20261013a-redo-unify">
+<meta name="dorokei-rev" content="20261015a-lock-wait-sfx">
 <script>
 (function(){
   var nav=navigator, mm=window.matchMedia;
@@ -303,7 +303,7 @@ function beepUi(freq,dur,type,vol){
 }
 function sfxTap(){ beepUi(540,48,"sine",0.028); }
 function sfxCard(){ beepUi(860,36,"triangle",0.024); }
-document.addEventListener("click",function(e){ const b=e.target&&e.target.closest&&e.target.closest("button"); if(b&&!b.disabled) sfxTap(); },true);
+document.addEventListener("click",function(e){ const b=e.target&&e.target.closest&&e.target.closest("button"); if(b&&!b.disabled&&b.id!=="lockBtn"&&b.id!=="waitBtn") sfxTap(); },true);
 function sfxCatch(){ ensureAudio(); beep(523,90,"sine",.09); setTimeout(()=>beep(659,90,"sine",.09),80); setTimeout(()=>beep(784,160,"sine",.1),160); }
 function sfxFound(){ ensureAudio(); beep(420,140,"sawtooth",.14); setTimeout(()=>beep(280,160,"sawtooth",.14),100); setTimeout(()=>beep(160,280,"triangle",.16),220); }
 function sfxLock(){ ensureAudio(); beep(340,90,"square",.1); setTimeout(()=>beep(220,140,"square",.12),70); setTimeout(()=>beep(160,180,"triangle",.1),160); }
@@ -394,6 +394,7 @@ function syncWaitBtn(){
 }
 function doThiefWait(){
   if(!iAmThief() || S.phase!=="thief" || S.waitUsed) return;
+  sfxCard();
   S.pick=-1;
   S.waitAct=true;
   S.waitUsed=true;
@@ -623,6 +624,7 @@ function doPoliceLock(fromCpu){
   if(!S.hasKey || S.pendingLock) return;
   if(S.phase!=="cop") return;
   if(iAmThief() && !fromCpu) return;
+  if(!fromCpu) sfxCard();
   if(!fromCpu) learnPlayerGuess(-1,true);
   S.lockAct=true;
   S.guess=-1;
